@@ -26,12 +26,12 @@ module Devise
       end
 
       def self.required_fields(klass)
-        [:password_salt]
+        []
       end
 
       # Generates password salt when setting the password.
       def password=(new_password)
-        self.password_salt = self.class.password_salt if new_password.present?
+        self.password_salt = self.class.password_salt if new_password.present? && encryptor_class.separate_salt?
         super
       end
 
@@ -46,14 +46,14 @@ module Devise
       # and by other modules whenever there is a need for a random
       # token based on the user password.
       def authenticatable_salt
-        self.password_salt
+        self.password_salt if encryptor_class.separate_salt?
       end
 
     protected
 
       # Digests the password using the configured encryptor.
       def password_digest(password)
-        if password_salt.present?
+        if !encryptor_class.separate_salt? || password_salt.present?
           encryptor_class.digest(password, self.class.stretches, authenticatable_salt, self.class.pepper)
         end
       end

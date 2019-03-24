@@ -63,8 +63,6 @@ class EncryptableTest < ActiveSupport::TestCase
   end
 
   test 'required_fields should contain the fields that Devise uses' do
-    assert_same_content Devise::Models::Encryptable.required_fields(Admin), [
-      :password_salt
-    ]
+    assert_same_content Devise::Models::Encryptable.required_fields(Admin), []
   end
 end

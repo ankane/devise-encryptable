@@ -20,6 +20,10 @@ module Devise
         def self.compare(encrypted_password, password, stretches, salt, pepper)
           Devise.secure_compare(encrypted_password, digest(password, stretches, salt, pepper))
         end
+
+        def self.separate_salt?
+          true
+        end
       end
     end
   end
